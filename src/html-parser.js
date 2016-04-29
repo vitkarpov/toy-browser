@@ -52,9 +52,7 @@ Parser.prototype.getNodes = function() {
  * @return {object}
  */
 Parser.prototype.getNode = function() {
-    var ch = this._getCurrentChar();
-
-    if (ch === '<') {
+    if (this._getCurrentChar() === '<') {
         return this.getElementNode();
     }
     return this.getTextNode();
@@ -69,6 +67,8 @@ Parser.prototype.getElementNode = function() {
 
     var tag = this.consumeTagName();
     var attrs = this.consumeAttrs();
+
+    assert(this._consumeCurrentChar(), '>');
 
     var children = this.getNode();
 
