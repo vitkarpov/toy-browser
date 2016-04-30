@@ -3,10 +3,6 @@ var Parser = require('../../src/html.js');
 
 describe('HTML Parser', function() {
     ([
-        { method: 'consumeWhitespaces', tests: [
-            { input: '   ', expected: '   ' },
-            { input: '  foo', expected: '  ' }
-        ] },
         { method: 'consumeText', tests: [
             { input: 'hello, world', expected: 'hello, world' },
             { input: '   fooo    bar</h1>', expected: '   fooo    bar' },
