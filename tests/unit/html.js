@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var Parser = require('../../src/html-parser.js');
+var Parser = require('../../src/html.js');
 
 describe('HTML Parser', function() {
     ([

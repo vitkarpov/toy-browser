@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var Node = require('../../src/node.js');
-var Parser = require('../../src/html-parser.js');
+var Parser = require('../../src/html.js');
 
 describe('HTML Parser', function() {
     describe('should parse <html><body class="foo"><h1 data-foo="bar">hello!</h1></body></html> and return dom ->', function() {
