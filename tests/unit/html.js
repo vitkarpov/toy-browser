@@ -2,24 +2,15 @@ var expect = require('chai').expect;
 var Parser = require('../../src/html.js');
 
 describe('HTML Parser', function() {
-    ([
-        { method: 'consumeText', tests: [
+    describe('#consumeText', function() {
+        ([
             { input: 'hello, world', expected: 'hello, world' },
             { input: '   fooo    bar</h1>', expected: '   fooo    bar' },
             { input: '1111!!!!&&**$$$FR#</h1>', expected: '1111!!!!&&**$$$FR#' }
-        ] },
-        { method: 'consumeTagName', tests: [
-            { input: 'h1', expected: 'h1' },
-            { input: 'b', expected: 'b' },
-            { input: 'html', expected: 'html' },
-        ] }
-    ]).forEach(function(item) {
-        describe('#' + item.method, function() {
-            item.tests.forEach(function(test) {
-                it('consumes "' + test.input + '" and returns "' + test.expected + '"', function() {
-                    var p = new Parser(test.input);
-                    expect(p[item.method]()).to.equal(test.expected);
-                });
+        ]).forEach(function(test) {
+            it('consumes "' + test.input + '" and returns "' + test.expected + '"', function() {
+                var p = new Parser(test.input);
+                expect(p.consumeText()).to.equal(test.expected);
             });
         });
     });

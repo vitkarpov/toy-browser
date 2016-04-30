@@ -6,6 +6,12 @@ describe('Base Parser', function() {
         { method: 'consumeWhitespaces', tests: [
             { input: '   ', expected: '   ' },
             { input: '  foo', expected: '  ' }
+        ] },
+        { method: 'consumeWord', tests: [
+            { input: 'h1', expected: 'h1' },
+            { input: 'b', expected: 'b' },
+            { input: 'html', expected: 'html' },
+            { input: 'hello-my-block', expected: 'hello-my-block' }
         ] }
     ]).forEach(function(item) {
         describe('#' + item.method, function() {

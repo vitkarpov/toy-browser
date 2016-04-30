@@ -11,6 +11,17 @@ var Parser = function(input) {
 };
 
 /**
+ * Consumes arbitrary word consists of letters and digits
+ * Could consume an indentifier's name: tag, class
+ * @return {string}
+ */
+Parser.prototype.consumeWord = function() {
+    return this._consume(function(ch) {
+        return /\w|\d|-/.test(ch);
+    });
+};
+
+/**
  * Consumes one or more whitespaces (also tabs, line feed and etc.) in a row
  * @return {string}
  */

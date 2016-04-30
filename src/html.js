@@ -63,7 +63,7 @@ Parser.prototype.getNode = function() {
 Parser.prototype.getElementNode = function() {
     assert(this._consumeCurrentChar(), '<');
 
-    var tag = this.consumeTagName();
+    var tag = this.consumeWord();
     var attrs = this.consumeAttrs();
 
     assert(this._consumeCurrentChar(), '>');
@@ -72,7 +72,7 @@ Parser.prototype.getElementNode = function() {
 
     assert(this._consumeCurrentChar(), '<');
     assert(this._consumeCurrentChar(), '/');
-    assert(this.consumeTagName(), tag);
+    assert(this.consumeWord(), tag);
     assert(this._consumeCurrentChar(), '>');
 
     return new Node(Node.ELEMENT_NODE, {
@@ -87,26 +87,6 @@ Parser.prototype.getElementNode = function() {
  */
 Parser.prototype.getTextNode = function() {
     return new Node(Node.TEXT_NODE, null, this.consumeText());
-};
-
-/**
- * Consumes a tag name
- * @return {string}
- */
-Parser.prototype.consumeTagName = function() {
-    return this._consume(function(ch) {
-        return /\w|\d/.test(ch);
-    });
-};
-
-/**
- * Consumes an attribute name
- * @return {string}
- */
-Parser.prototype.consumeAttrName = function() {
-    return this._consume(function(ch) {
-        return /\w|\d|-/.test(ch);
-    });
 };
 
 /**
@@ -142,7 +122,7 @@ Parser.prototype.consumeAttrs = function() {
  * @return {object}
  */
 Parser.prototype.consumeAttr = function() {
-    var name = this.consumeAttrName();
+    var name = this.consumeWord();
     assert(this._consumeCurrentChar(), '=');
     var value = this.consumeAttrValue();
 
