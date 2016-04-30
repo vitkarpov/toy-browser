@@ -34,17 +34,14 @@ Parser.prototype.parse = function() {
  * @return {array}
  */
 Parser.prototype.getNodes = function() {
-    var result = [];
+    var nodes = [];
     var next;
 
-    while (true) {
+    while (!this._end() && !this._startsWith('</')) {
         this.consumeWhitespaces();
-        if (this._end() || this._startsWith('</')) {
-            break;
-        }
-        result.push(this.getNode());
+        nodes.push(this.getNode());
     }
-    return result;
+    return nodes;
 };
 
 /**
