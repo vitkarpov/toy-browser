@@ -1,3 +1,4 @@
+var assert = require('./assert.js');
 var BaseParser = require('./parser.js');
 
 /**
@@ -52,9 +53,12 @@ Parser.prototype.getRule = function() {
 Parser.prototype.consumeSelectors = function() {
     var selectors = [];
 
-    while (this._getCurrentChar() !== '{') {
+    while (true) {
         selectors.push(this.consumeSelector());
         this.consumeWhitespaces();
+        if (this._getCurrentChar() === '{') {
+            break;
+        }
         assert(this._consumeCurrentChar(), ',');
         this.consumeWhitespaces();
     }
@@ -68,7 +72,7 @@ Parser.prototype.consumeSelectors = function() {
  * - .foo.bar
  * - #foo.bar
  * - h1.foo
- * @return {[type]} [description]
+ * @return {Selector}
  */
 Parser.prototype.consumeSelector = function() {
     /**
@@ -80,7 +84,7 @@ Parser.prototype.consumeSelector = function() {
         classes: []
     };
 
-    while (this._getCurrentChar() !== ',') {
+    while (!this._end() && [' ', '{', ','].indexOf(this._getCurrentChar()) === -1) {
         switch (this._getCurrentChar()) {
             case '.':
                 this._consumeCurrentChar();
