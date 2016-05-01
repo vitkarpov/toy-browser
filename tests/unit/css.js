@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var Parser = require('../../src/css.js');
 
 describe('HTML Parser', function() {
-    describe('#consumeSimpleSelector', function() {
+    describe('#consumeSelector', function() {
         ([
             { input: '.foo,', expected: {
                 classes: ['foo'],
