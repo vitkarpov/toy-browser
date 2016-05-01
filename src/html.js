@@ -3,9 +3,9 @@ var assert = require('./assert.js');
 var BaseParser = require('./parser.js');
 
 /**
- * Recursively parses html and returns DOM
+ * HTML parser
+ * @constructor
  * @param  {string} html
- * @return {object}
  */
 var Parser = function(html) {
     BaseParser.call(this, html);

@@ -1,11 +1,33 @@
-var BaseParser = require('../../src/parser.js');
+var BaseParser = require('./parser.js');
 
+/**
+ * @typedef {object} Rule
+ * @property {array} selectors
+ * @property {array} declarations
+ */
+
+/**
+ * @typedef {object} Selector
+ * @property {string?} id
+ * @property {string?} tag
+ * @property {array} classes
+ */
+
+/**
+ * CSS parser
+ * @param {string} css
+ */
 var Parser = function(css) {
     BaseParser.call(this, css);
 }
 
 Parser.prototype = Object.create(BaseParser.prototype);
 
+/**
+ * Parses all the file and
+ * returns an array of rules
+ * @return {Rule[]}
+ */
 Parser.prototype.getRules = function() {
     var rules = [];
 
@@ -16,6 +38,10 @@ Parser.prototype.getRules = function() {
     return rules;
 };
 
+/**
+ * Returns a single rule
+ * @return {Rule}
+ */
 Parser.prototype.getRule = function() {
     return {
         selectors: this.consumeSelectors(),
@@ -27,7 +53,7 @@ Parser.prototype.consumeSelectors = function() {
     var selectors = [];
 
     while (this._getCurrentChar() !== '{') {
-        selectors.push(this.consumeSimpleSelector());
+        selectors.push(this.consumeSelector());
         this.consumeWhitespaces();
         assert(this._consumeCurrentChar(), ',');
         this.consumeWhitespaces();
@@ -36,29 +62,40 @@ Parser.prototype.consumeSelectors = function() {
     return selectors;
 };
 
-Parser.prototype.consumeSimpleSelector = function() {
+/**
+ * Consumes one selector,
+ * currently supported only simple one, e.g.:
+ * - .foo.bar
+ * - #foo.bar
+ * - h1.foo
+ * @return {[type]} [description]
+ */
+Parser.prototype.consumeSelector = function() {
+    /**
+     * @type {Selector}
+     */
     var result = {
-        ids: [],
-        classes: [],
-        tags: [],
-        universal: false
+        tag: null,
+        id: null,
+        classes: []
     };
 
     while (this._getCurrentChar() !== ',') {
-        switch (this._consumeCurrentChar()) {
+        switch (this._getCurrentChar()) {
             case '.':
+                this._consumeCurrentChar();
                 result.classes.push(this.consumeWord());
                 break;
             case '#':
-                result.ids.push(this.consumeWord());
-                break;
-            case '*'
-                result.universal = true;
+                this._consumeCurrentChar();
+                result.id = this.consumeWord();
                 break;
             default:
-                result.tags.push(this.consumeWord());
+                result.tag = this.consumeWord();
                 break;
         }
     }
     return result;
 };
+
+module.exports = Parser;
