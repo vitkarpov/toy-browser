@@ -1,4 +1,5 @@
 var assert = require('./assert.js');
+var Specifity = require('./specifity.js');
 var BaseParser = require('./parser.js');
 
 /**
@@ -50,6 +51,11 @@ Parser.prototype.getRule = function() {
     }
 };
 
+/**
+ * Consumes a set of selectors for the rule, e.g
+ * .foo, .bar, #baz { color: red; }
+ * @return {array}
+ */
 Parser.prototype.consumeSelectors = function() {
     var selectors = [];
 
@@ -63,7 +69,7 @@ Parser.prototype.consumeSelectors = function() {
         this.consumeWhitespaces();
     }
 
-    return selectors;
+    return this.sortAccordingSpecifity(selectors);
 };
 
 /**
@@ -100,6 +106,19 @@ Parser.prototype.consumeSelector = function() {
         }
     }
     return result;
+};
+
+/**
+ * Sorting selectors according their specifity.
+ * @returns {array}
+ */
+Parser.prototype.sortAccordingSpecifity = function(selectors) {
+    return selectors.sort(function(current, next) {
+        var specifityCurrent = new Specifity(current);
+        var specifityNext = new Specifity(next);
+
+        return specifityNext - specifityCurrent;
+    });
 };
 
 module.exports = Parser;

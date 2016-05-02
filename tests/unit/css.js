@@ -71,6 +71,23 @@ describe('HTML Parser', function() {
                     id: null,
                     tag: null
                 }
+            ] },
+            { input: '.foo, h1.foo, #bar { color: red; }', expected: [
+                {
+                    classes: [],
+                    id: 'bar',
+                    tag: null
+                },
+                {
+                    classes: ['foo'],
+                    id: null,
+                    tag: 'h1'
+                },
+                {
+                    classes: ['foo'],
+                    id: null,
+                    tag: null
+                }
             ] }
         ]).forEach(function(test) {
             it('consumes "' + test.input + '" and returns "' + JSON.stringify(test.expected) + '"', function() {
