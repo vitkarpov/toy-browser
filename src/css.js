@@ -45,10 +45,14 @@ Parser.prototype.getRules = function() {
  * @return {Rule}
  */
 Parser.prototype.getRule = function() {
-    return {
-        selectors: this.consumeSelectors(),
-        declarations: this.consumeDeclarations()
-    }
+    var rule = {};
+
+    rule.selectors = this.consumeSelectors();
+    assert(this._consumeCurrentChar(), '{');
+    rule.declarations = this.consumeDeclarations();
+    assert(this._consumeCurrentChar(), '}');
+
+    return rule;
 };
 
 /**
@@ -84,28 +88,28 @@ Parser.prototype.consumeSelector = function() {
     /**
      * @type {Selector}
      */
-    var result = {
+    var selector = {
         tag: null,
         id: null,
         classes: []
     };
 
-    while (!this._end() && [' ', '{', ','].indexOf(this._getCurrentChar()) === -1) {
+    while ([' ', '{', ','].indexOf(this._getCurrentChar()) === -1) {
         switch (this._getCurrentChar()) {
             case '.':
                 this._consumeCurrentChar();
-                result.classes.push(this.consumeWord());
+                selector.classes.push(this.consumeWord());
                 break;
             case '#':
                 this._consumeCurrentChar();
-                result.id = this.consumeWord();
+                selector.id = this.consumeWord();
                 break;
             default:
-                result.tag = this.consumeWord();
+                selector.tag = this.consumeWord();
                 break;
         }
     }
-    return result;
+    return selector;
 };
 
 /**
@@ -118,6 +122,53 @@ Parser.prototype.sortAccordingSpecifity = function(selectors) {
         var specifityNext = new Specifity(next);
 
         return specifityNext - specifityCurrent;
+    });
+};
+
+/**
+ * Consumes a set of declarations inside {}
+ * @return {array}
+ */
+Parser.prototype.consumeDeclarations = function() {
+    var declarations = [];
+
+    while (this._getCurrentChar() !== '}') {
+        declarations.push(this.consumeDeclaration());
+        this.consumeWhitespaces();
+        assert(this._consumeCurrentChar(), ';');
+        this.consumeWhitespaces();
+    }
+    return declarations;
+};
+
+/**
+ * Consumes a singe declaration and returns hash,
+ * e.g. color: red; -> { "color": "red" }
+ * @return {object}
+ */
+Parser.prototype.consumeDeclaration = function() {
+    var declaration = {};
+
+    while (this._getCurrentChar() !== ';') {
+        var prop = this.consumeWord();
+        this.consumeWhitespaces();
+        assert(this._consumeCurrentChar(), ':');
+        this.consumeWhitespaces();
+        var value = this._consumeValue();
+
+        declaration[prop] = value;
+    }
+    return declaration;
+};
+
+/**
+ * Consumes a value in declaration
+ * @private
+ * @return {string}
+ */
+Parser.prototype._consumeValue = function() {
+    return this._consume(function(ch) {
+        return /[^;]/.test(ch);
     });
 };
 
