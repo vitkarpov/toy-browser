@@ -2,10 +2,18 @@ var expect = require('chai').expect;
 var Node = require('../../src/node.js');
 var Parser = require('../../src/html.js');
 
+var html = [
+    '<html>',
+        '<body class="foo">',
+            '<h1 data-foo="bar">hello!</h1>',
+        '</body>',
+    '</html>'
+].join('');
+
 describe('HTML Parser', function() {
-    describe('should parse <html><body class="foo"><h1 data-foo="bar">hello!</h1></body></html> and return dom ->', function() {
+    describe('should parse ' + html + ' and return dom ->', function() {
         beforeEach(function() {
-            var parser = new Parser('<html><body class="foo"><h1 data-foo="bar">hello!</h1></body></html>');
+            var parser = new Parser(html);
             this.rootNode = parser.parse();
         });
         describe('html node ->', function() {

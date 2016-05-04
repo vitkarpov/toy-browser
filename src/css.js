@@ -30,12 +30,13 @@ Parser.prototype = Object.create(BaseParser.prototype);
  * returns an array of rules
  * @return {Rule[]}
  */
-Parser.prototype.getRules = function() {
+Parser.prototype.parse = function() {
     var rules = [];
 
-    while (!this._eof()) {
+    while (!this._end()) {
         this.consumeWhitespaces();
         rules.push(this.getRule());
+        this.consumeWhitespaces();
     }
     return rules;
 };
@@ -134,6 +135,7 @@ Parser.prototype.consumeDeclarations = function() {
 
     while (this._getCurrentChar() !== '}') {
         declarations.push(this.consumeDeclaration());
+
         this.consumeWhitespaces();
         assert(this._consumeCurrentChar(), ';');
         this.consumeWhitespaces();
@@ -148,13 +150,19 @@ Parser.prototype.consumeDeclarations = function() {
  */
 Parser.prototype.consumeDeclaration = function() {
     var declaration = {};
+    var prop;
+    var value;
 
     while (this._getCurrentChar() !== ';') {
-        var prop = this.consumeWord();
         this.consumeWhitespaces();
+        prop = this.consumeWord();
+        this.consumeWhitespaces();
+
         assert(this._consumeCurrentChar(), ':');
+
         this.consumeWhitespaces();
-        var value = this._consumeValue();
+        value = this._consumeValue();
+        this.consumeWhitespaces();
 
         declaration[prop] = value;
     }
