@@ -35,9 +35,11 @@ Parser.prototype.parse = function() {
  */
 Parser.prototype.getNodes = function() {
     var nodes = [];
-    var next;
 
-    while (!this._end() && !this._startsWith('</')) {
+    while (true) {
+        if (this._end() || this._startsWith('</')) {
+            break;
+        }
         this.consumeWhitespaces();
         nodes.push(this.getNode());
     }
@@ -68,7 +70,7 @@ Parser.prototype.getElementNode = function() {
 
     assert(this._consumeCurrentChar(), '>');
 
-    var children = this.getNode();
+    var children = this.getNodes();
 
     assert(this._consumeCurrentChar(), '<');
     assert(this._consumeCurrentChar(), '/');
@@ -86,7 +88,7 @@ Parser.prototype.getElementNode = function() {
  * @return {Node}
  */
 Parser.prototype.getTextNode = function() {
-    return new Node(Node.TEXT_NODE, null, this.consumeText());
+    return new Node(Node.TEXT_NODE, null, [this.consumeText()]);
 };
 
 /**

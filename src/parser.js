@@ -46,12 +46,13 @@ Parser.prototype._consume = function(isCharFits) {
 };
 
 /**
- * Is the current input starts from the specified char
+ * Is the rest of the input starts with the given one,
+ * e.g. </h1>hello... starts with the "</"
  * @param  {string} input
  * @return {boolean}
  */
 Parser.prototype._startsWith = function(input) {
-    return new RegExp('^' + input).test(this.input[this.pos]);
+    return new RegExp('^' + input).test(this.input.slice(this.pos));
 };
 
 /**
