@@ -5,7 +5,7 @@ var BaseParser = require('./parser.js');
 /**
  * HTML parser
  * @constructor
- * @param  {string} html
+ * @param {String} html
  */
 var Parser = function(html) {
     BaseParser.call(this, html);
@@ -31,7 +31,7 @@ Parser.prototype.parse = function() {
 /**
  * Recursively parses siblings of html elements
  * and returns node list
- * @return {array}
+ * @return {Node[]}
  */
 Parser.prototype.getNodes = function() {
     var nodes = [];
@@ -48,8 +48,7 @@ Parser.prototype.getNodes = function() {
 
 /**
  * Recursively parses single html element and returns a node
- * @param  {string} input
- * @return {object}
+ * @return {Node}
  */
 Parser.prototype.getNode = function() {
     if (this._getCurrentChar() === '<') {
@@ -93,7 +92,7 @@ Parser.prototype.getTextNode = function() {
 
 /**
  * Consumes text inside a tag
- * @return {string}
+ * @return {String}
  */
 Parser.prototype.consumeText = function() {
     return this._consume(function(ch) {
@@ -103,7 +102,7 @@ Parser.prototype.consumeText = function() {
 
 /**
  * Consumes a set of attrs
- * @return {array}
+ * @return {Object}
  */
 Parser.prototype.consumeAttrs = function() {
     var result = {};
@@ -121,7 +120,7 @@ Parser.prototype.consumeAttrs = function() {
 
 /**
  * Consumes single attribute pair name="value"
- * @return {object}
+ * @return {Object}
  */
 Parser.prototype.consumeAttr = function() {
     var name = this.consumeWord();
@@ -136,7 +135,7 @@ Parser.prototype.consumeAttr = function() {
 
 /**
  * Consumes attr value
- * @return {string}
+ * @return {String}
  */
 Parser.prototype.consumeAttrValue = function() {
     var QUOTE = '"';

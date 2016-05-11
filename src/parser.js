@@ -13,7 +13,7 @@ var Parser = function(input) {
 /**
  * Consumes arbitrary word consists of letters and digits
  * Could consume an indentifier's name: tag, class
- * @return {string}
+ * @return {String}
  */
 Parser.prototype.consumeWord = function() {
     return this._consume(function(ch) {
@@ -23,7 +23,7 @@ Parser.prototype.consumeWord = function() {
 
 /**
  * Consumes one or more whitespaces (also tabs, line feed and etc.) in a row
- * @return {string}
+ * @return {String}
  */
 Parser.prototype.consumeWhitespaces = function() {
     return this._consume(function(ch) {
@@ -34,7 +34,7 @@ Parser.prototype.consumeWhitespaces = function() {
 /**
  * Consumes only appropriate characters from input
  * @param {Function} isCharFits callback tests a char somehow
- * @return {string}
+ * @return {String}
  */
 Parser.prototype._consume = function(isCharFits) {
     var result = '';
@@ -48,8 +48,8 @@ Parser.prototype._consume = function(isCharFits) {
 /**
  * Is the rest of the input starts with the given one,
  * e.g. </h1>hello... starts with the "</"
- * @param  {string} input
- * @return {boolean}
+ * @param  {String} input
+ * @return {Boolean}
  */
 Parser.prototype._startsWith = function(input) {
     return new RegExp('^' + input).test(this.input.slice(this.pos));
@@ -58,7 +58,7 @@ Parser.prototype._startsWith = function(input) {
 /**
  * Checkes have we consumed all the input
  * @private
- * @return {boolean}
+ * @return {Boolean}
  */
 Parser.prototype._end = function() {
     return this.pos >= this.inputLength;
@@ -67,7 +67,7 @@ Parser.prototype._end = function() {
 /**
  * Returns the current char without consuming it
  * @private
- * @return {string}
+ * @return {String}
  */
 Parser.prototype._getCurrentChar = function() {
     return this.input[this.pos];
@@ -76,7 +76,7 @@ Parser.prototype._getCurrentChar = function() {
 /**
  * Returns the current char and increases the counter
  * @private
- * @return {string}
+ * @return {String}
  */
 Parser.prototype._consumeCurrentChar = function() {
     return this.input[this.pos++];

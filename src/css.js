@@ -17,7 +17,7 @@ var BaseParser = require('./parser.js');
 
 /**
  * CSS parser
- * @param {string} css
+ * @param {String} css
  */
 var Parser = function(css) {
     BaseParser.call(this, css);
@@ -59,7 +59,7 @@ Parser.prototype.getRule = function() {
 /**
  * Consumes a set of selectors for the rule, e.g
  * .foo, .bar, #baz { color: red; }
- * @return {array}
+ * @return {Selector[]}
  */
 Parser.prototype.consumeSelectors = function() {
     var selectors = [];
@@ -115,7 +115,8 @@ Parser.prototype.consumeSelector = function() {
 
 /**
  * Sorting selectors according their specifity.
- * @returns {array}
+ * @param  {Selector[]}
+ * @return {Selector[]}
  */
 Parser.prototype.sortAccordingSpecifity = function(selectors) {
     return selectors.sort(function(current, next) {
@@ -127,8 +128,8 @@ Parser.prototype.sortAccordingSpecifity = function(selectors) {
 };
 
 /**
- * Consumes a set of declarations inside {}
- * @return {array}
+ * Consumes a set of declarations inside curly braces
+ * @return {Object[]}
  */
 Parser.prototype.consumeDeclarations = function() {
     var declarations = [];
@@ -146,7 +147,7 @@ Parser.prototype.consumeDeclarations = function() {
 /**
  * Consumes a singe declaration and returns hash,
  * e.g. color: red; -> { "color": "red" }
- * @return {object}
+ * @return {Object}
  */
 Parser.prototype.consumeDeclaration = function() {
     var declaration = {};
@@ -172,7 +173,7 @@ Parser.prototype.consumeDeclaration = function() {
 /**
  * Consumes a value in declaration
  * @private
- * @return {string}
+ * @return {String}
  */
 Parser.prototype._consumeValue = function() {
     return this._consume(function(ch) {

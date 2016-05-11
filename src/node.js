@@ -8,7 +8,7 @@
  * https://dom.spec.whatwg.org/#dom-node-nodetype
  * @readonly
  * @typedef {enum} NODE_TYPE
- * @enum {number}
+ * @enum {Number}
  */
 var NODE_TYPES = {
     ELEMENT_NODE: 1,
@@ -21,7 +21,7 @@ var NODE_TYPES = {
  * @class Node
  * @param {NODE_TYPES} type
  * @param {ElementData} data
- * @param {array} children
+ * @param {Node[]} children
  */
 var Node = function(type, data, children) {
     this.nodeType = type;
