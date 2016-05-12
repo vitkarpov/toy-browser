@@ -1,3 +1,5 @@
+var assert = require('./assert.js');
+
 /**
  * Base parser with a few general methods
  * which suit for both html and css
@@ -5,6 +7,7 @@
  * @param {String} input
  */
 var Parser = function(input) {
+    assert(typeof input, 'string');
     this.pos = 0;
     this.input = input;
     this.inputLength = input.length;
