@@ -48,12 +48,41 @@ StyleTree.prototype.build = function(nodes) {
  * @return {Object}
  */
 StyleTree.prototype.getStylesForNode = function(node) {
-    var styles = {};
-    var rules = this.getRulesForNode(node);
+    return this.getRulesForNode(node).reduce(function(styles, rule) {
+        rule.declarations.forEach(function(decl) {
+            Object.keys(decl).forEach(function(key) {
+                styles[key] = decl[key];
+            });
+        });
+        return styles;
+    }, {});
 };
 
+/**
+ * Find rules for the node according existing selectors in CSSOM
+ * @param  {Node} node
+ * @return {Rule[]}
+ */
 StyleTree.prototype.getRulesForNode = function(node) {
-    return [];
+    if (node.nodeType === Node.TEXT_NODE) {
+        return [];
+    }
+    var nodeClasses = node.data.attrs['class'];
+    var nodeId = node.data.attrs.id;
+    var nodeTag = node.data.tag;
+
+    return this.rules.filter(function(rule) {
+
+        return rule.selectors.some(function(selector) {
+            return (
+                nodeClasses && selector.classes.some(function(className) {
+                    return nodeClasses.indexOf(className) > -1;
+                }) ||
+                selector.id === nodeId ||
+                selector.tag === nodeTag
+            );
+        });
+    });
 };
 
 module.exports = StyleTree;

@@ -14,7 +14,8 @@ var html = [
 
 var css = [
     'body { background: red; }',
-    'h1 { color: red; }',
+    '.foo { color: green; }',
+    'h1 { background: red; color: red; }',
     'h1.bar { color: blue; }'
 ].join('');
 
@@ -23,10 +24,24 @@ describe('Style Tree', function() {
         var dom = new HtmlParser(html).parse();
         var rules = new CssParser(css).parse();
 
-        this.styleTree = new StyleTree(dom, rules);
+        this.styleTree = new StyleTree(dom, rules).build();
     });
 
-    it('should foo', function() {
-        console.log(this.styleTree.build());
+    describe('body node ->', function() {
+        beforeEach(function() {
+            this.body = this.styleTree[0].children[0];
+        });
+        it('should have "background: red; color: green;" styles', function() {
+            expect(this.body.styles).to.be.eql({ background: 'red', color: 'green' });
+        });
+
+        describe('h1 node ->', function() {
+            beforeEach(function() {
+                this.h1 = this.body.children[0];
+            });
+            it('should return "background:red; color: blue;" styles', function() {
+                expect(this.h1.styles).to.be.eql({ background: 'red', color: 'blue' });
+            });
+        });
     });
 })
